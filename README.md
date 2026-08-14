@@ -1,4 +1,4 @@
-# homebrew-aerialdrop
+# YapWH1208/homebrew-tap
 
 Homebrew tap for [AerialDrop](https://github.com/YapWH1208/AerialDrop) — import your own videos into macOS Tahoe's native Aerial (wallpaper) catalogue.
 
