@@ -1,0 +1,57 @@
+name: Update cask
+
+on:
+  schedule:
+    # Daily check for new AerialDrop releases (06:00 UTC)
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    name: Bump cask from latest release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Update cask
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          API="https://api.github.com/repos/YapWH1208/AerialDrop/releases/latest"
+          RELEASE_JSON="$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$API")"
+          VERSION="$(printf '%s' "$RELEASE_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin)["tag_name"].lstrip("v"))')"
+          SHA256="$(printf '%s' "$RELEASE_JSON" | python3 -c '
+          import json, sys
+          data = json.load(sys.stdin)
+          version = data["tag_name"].lstrip("v")
+          asset = next((a for a in data["assets"] if a["name"] == "AerialDrop-" + version + "-macOS.zip"), None)
+          if asset is None:
+              sys.exit("no AerialDrop-" + version + "-macOS.zip asset in latest release")
+          digest = (asset.get("digest") or "").split(":", 1)[-1]
+          if len(digest) != 64:
+              sys.exit("asset digest missing or malformed: " + digest)
+          print(digest)
+          ')"
+          ruby - "$VERSION" "$SHA256" <<'RUBY'
+          version, sha = ARGV
+          path = "Casks/aerialdrop.rb"
+          text = File.read(path)
+          text = text.sub(/version "\d+[\d.]*"/, %(version "#{version}"))
+          text = text.sub(/sha256 "[0-9a-f]{64}"/, %(sha256 "#{sha}"))
+          File.write(path, text)
+          RUBY
+          if git diff --quiet; then
+            echo "Cask already up to date (v$VERSION)."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add Casks/aerialdrop.rb
+            git commit -m "Bump AerialDrop to v$VERSION"
+            git push
+            echo "Bumped AerialDrop to v$VERSION."
+          fi
