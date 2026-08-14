@@ -15,9 +15,17 @@ or in a single command:
 brew install --cask YapWH1208/homebrew-aerialdrop/aerialdrop
 ```
 
-## First launch
+## Gatekeeper
 
-AerialDrop is ad-hoc signed. The first launch may need **right-click → Open** on `AerialDrop.app` in /Applications (or install with `brew install --cask --no-quarantine aerialdrop`).
+AerialDrop is ad-hoc signed (no paid Apple Developer ID), so macOS would normally refuse the first launch after download. The cask's `postflight` removes the download quarantine automatically, so `brew install --cask aerialdrop` (and upgrades) just work.
+
+If you install the raw release zip instead, clear the quarantine yourself:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/AerialDrop.app
+```
+
+or right-click → **Open** once. This is the free alternative to Apple notarization, which requires a \$99/year Developer account.
 
 ## Updating
 
