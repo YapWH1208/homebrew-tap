@@ -16,6 +16,14 @@ cask "aerialdrop" do
 
   app "AerialDrop.app"
 
+  postflight do
+    # AerialDrop is ad-hoc signed and not notarized (no paid Apple Developer
+    # account), so a download quarantine attribute makes Gatekeeper refuse the
+    # first launch. Remove it so brew installs just open.
+    system_command "xattr",
+                   args: ["-dr", "com.apple.quarantine", appdir.join("AerialDrop.app").to_s]
+  end
+
   zap trash: [
     "~/Library/Application Support/com.apple.wallpaper/aerials/AerialDropBackups",
     "~/Library/Application Support/com.apple.wallpaper/Store/AerialDropBackups",
