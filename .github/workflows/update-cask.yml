@@ -5,6 +5,9 @@ on:
     # Daily check for new AerialDrop releases (06:00 UTC)
     - cron: "0 6 * * *"
   workflow_dispatch:
+  repository_dispatch:
+    types:
+      - release-published
 
 permissions:
   contents: write
