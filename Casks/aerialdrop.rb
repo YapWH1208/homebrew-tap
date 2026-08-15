@@ -1,6 +1,6 @@
 cask "aerialdrop" do
-  version "1.1.3"
-  sha256 "be8e8a50f2dce0821c3050fb664ddc88aa8acd79b5680095b52c4a37ff0efc72"
+  version "1.1.4"
+  sha256 "09c7d26f99540919d3040e83a1118ac11b11de56d745fe0b10e4c0e66fdf4ece"
 
   url "https://github.com/YapWH1208/AerialDrop/releases/download/v#{version}/AerialDrop-#{version}-macOS.zip"
   name "AerialDrop"
