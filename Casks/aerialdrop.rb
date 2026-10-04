@@ -1,18 +1,35 @@
 cask "aerialdrop" do
-  version "1.1.9"
-  sha256 "e15c54590650c57d3c91492c85b080fd7911f582397b54b3e0973fedbcff20c2"
+  # BEGIN GENERATED COMPATIBILITY
+  on_tahoe :or_newer do
+    version "1.1.9"
+    sha256 "e15c54590650c57d3c91492c85b080fd7911f582397b54b3e0973fedbcff20c2"
+    url "https://github.com/YapWH1208/AerialDrop/releases/download/v1.1.9/AerialDrop-1.1.9-macOS.zip"
+  end
 
-  url "https://github.com/YapWH1208/AerialDrop/releases/download/v#{version}/AerialDrop-#{version}-macOS.zip"
+  depends_on macos: :tahoe
+  depends_on arch: :arm64
+  # END GENERATED COMPATIBILITY
+
   name "AerialDrop"
   desc "Import your own videos into the native Aerial wallpaper catalogue"
   homepage "https://github.com/YapWH1208/AerialDrop"
 
-  livecheck do
-    url :url
-    strategy :github_latest
+  # Homebrew considers any different installed version outdated, even when the
+  # selected version is older. Disable that downgrade before upgrade preflight
+  # moves the installed app. Uninstall still works; fresh install then clears it.
+  installed_release = cask.installed_version
+  if version.nil?
+    disable! date: "2026-10-04",
+             because: "has no compatible published release for this macOS version"
+  elsif installed_release && Version.new(installed_release) > Version.new(version.to_s)
+    disable! date: "2026-10-04",
+             because: "would downgrade installed AerialDrop #{installed_release} to compatible #{version}; " \
+                      "uninstall it first if you deliberately want to install #{version}"
   end
 
-  depends_on macos: :tahoe
+  livecheck do
+    skip "Updates are selected per macOS version from AerialDrop's compatibility policy"
+  end
 
   app "AerialDrop.app"
 
