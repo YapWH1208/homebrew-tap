@@ -1,9 +1,9 @@
 cask "aerialdrop" do
   # BEGIN GENERATED COMPATIBILITY
   on_tahoe :or_newer do
-    version "1.1.9"
-    sha256 "e15c54590650c57d3c91492c85b080fd7911f582397b54b3e0973fedbcff20c2"
-    url "https://github.com/YapWH1208/AerialDrop/releases/download/v1.1.9/AerialDrop-1.1.9-macOS.zip"
+    version "1.1.10"
+    sha256 "6f1570ca2145e80fe46041e6092b289c71fe53cc42964b30cab4a5fbfa297e63"
+    url "https://github.com/YapWH1208/AerialDrop/releases/download/v1.1.10/AerialDrop-1.1.10-macOS.zip"
   end
 
   depends_on macos: :tahoe
