@@ -17,7 +17,7 @@ cask "aerialdrop" do
   # Homebrew considers any different installed version outdated, even when the
   # selected version is older. Disable that downgrade before upgrade preflight
   # moves the installed app. Uninstall still works; fresh install then clears it.
-  installed_release = cask.installed_version
+  installed_release = self.cask.installed_version
   if version.nil?
     disable! date: "2026-10-04",
              because: "has no compatible published release for this macOS version"
