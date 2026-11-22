@@ -101,6 +101,7 @@ class UpdateAerialDropTests(unittest.TestCase):
             first = cask.read_text(encoding="utf-8")
             self.assertFalse(updater.update_cask(cask, policy, FIXTURE["catalogues"]["base"]))
             self.assertEqual(first, cask.read_text(encoding="utf-8"))
+            self.assertIn("auto_updates true", first)
             self.assertIn("postflight do", first)
             self.assertIn("zap trash:", first)
 

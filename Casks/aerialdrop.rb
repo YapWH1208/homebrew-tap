@@ -13,6 +13,7 @@ cask "aerialdrop" do
   name "AerialDrop"
   desc "Import your own videos into the native Aerial wallpaper catalogue"
   homepage "https://github.com/YapWH1208/AerialDrop"
+  auto_updates true
 
   # Homebrew considers any different installed version outdated, even when the
   # selected version is older. Disable that downgrade before upgrade preflight
